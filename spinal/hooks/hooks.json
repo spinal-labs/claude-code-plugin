@@ -1,0 +1,18 @@
+{
+  "description": "Capture Spinal PR session context before simple gh pr create commands.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(gh pr create*)",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "spinal",
+  "description": "Capture PR session context for Spinal before gh pr create.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Spinal"
+  },
+  "homepage": "https://getspinal.com",
+  "repository": "https://github.com/spinal-labs/claude-code-plugin",
+  "license": "LicenseRef-Proprietary",
+  "keywords": [
+    "spinal",
+    "pr-review",
+    "claude-code",
+    "session-context"
+  ],
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json"
+}
