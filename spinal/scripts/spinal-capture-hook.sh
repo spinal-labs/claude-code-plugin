@@ -14,7 +14,7 @@ if [ -z "$hook_input" ]; then
 fi
 
 if ! command -v spinal >/dev/null 2>&1; then
-  diagnostic "spinal CLI not found on PATH; run 'spinal capture' manually after creating the PR"
+  diagnostic "spinal CLI not found on PATH; automatic PR context capture is unavailable"
   exit 0
 fi
 

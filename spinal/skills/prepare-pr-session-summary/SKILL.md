@@ -1,10 +1,10 @@
 ---
-description: Write Spinal's session-summary JSON immediately before creating a pull request with gh pr create.
+description: Optionally enrich Spinal's automatic PR session-context capture before gh pr create.
 ---
 
 # Prepare PR Session Summary
 
-Before running `gh pr create`, write a single JSON object to `${TMPDIR:-/tmp}/spinal-session-summary.json` with these fields only:
+When this skill is automatically selected before `gh pr create`, write a single JSON object to `${TMPDIR:-/tmp}/spinal-session-summary.json` with these fields only. Do not ask the user to run this skill manually; if the file is absent, the capture hook falls back to transcript parsing.
 
 ```json
 {

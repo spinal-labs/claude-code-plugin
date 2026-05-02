@@ -1,7 +1,7 @@
 {
   "name": "spinal",
   "description": "Capture PR session context for Spinal before gh pr create.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Spinal"
   },

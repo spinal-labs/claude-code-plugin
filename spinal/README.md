@@ -26,22 +26,24 @@ Inside Claude Code:
 
 ```text
 /hooks
-/spinal:capture-pr-context
 ```
 
 ## Behavior
 
 - The plugin registers a `PreToolUse` hook for Bash commands.
-- The hook captures only simple `gh pr create` commands.
+- The hook automatically captures PR session context before supported `gh pr create` commands.
+- Supported forms are `gh pr create ...` from the repository root and `cd <repo> && gh pr create ...`.
 - Complex shell chains, missing CLI, missing auth, and capture failures are fail-open by default.
+- Successful capture prints the uploaded context id, matched repository, and head SHA.
 - Set `SPINAL_CAPTURE_HOOK_FAIL_CLOSED=1` only for local testing when a failing capture should block the tool call.
 
-## Manual Capture
+## Diagnostics
 
-Run from the repository root:
+Normal PR creation does not require manually running the CLI or a skill. Use these commands only when debugging local setup or capture payloads:
 
 ```bash
 spinal diagnose
 spinal capture --dry-run
-spinal capture
 ```
+
+`spinal diagnose` reports `automatic_capture_ready` and blocker codes such as `missing_api_token`, `repository_not_detected`, or `no_changed_files`.

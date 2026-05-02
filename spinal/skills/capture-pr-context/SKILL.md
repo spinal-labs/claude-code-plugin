@@ -1,11 +1,11 @@
 ---
-description: Capture PR session context for Spinal manually or diagnose the automatic capture hook.
+description: Diagnose Spinal's automatic PR session-context capture hook.
 disable-model-invocation: true
 ---
 
 # Capture PR Context
 
-Use this helper when automatic capture did not run, the hook reported a diagnostic, or a developer wants to preview the captured payload.
+Use this helper only when automatic capture did not run, the hook reported a diagnostic, or support needs to preview the captured payload. Normal PR creation should not require manually invoking this skill or running `spinal capture`.
 
 Before running `gh pr create`, write a single JSON object to `${TMPDIR:-/tmp}/spinal-session-summary.json` with these fields only:
 
@@ -30,13 +30,12 @@ Prerequisites:
 - `spinal login` has completed, or `spinal login --api-base-url <url> --token <token>` has stored a manual CLI token.
 - The current git repository is connected in Spinal.
 
-Run these commands from the repository root:
+For diagnostics, run these commands from the repository root:
 
 ```bash
 spinal login
 spinal diagnose
 spinal capture --dry-run
-spinal capture
 ```
 
 For automatic capture, verify the plugin hook is installed with `/hooks` and that `spinal` is on `PATH`. The hook is fail-open by default, so PR creation should proceed even when capture fails.

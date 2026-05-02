@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(gh pr create*)",
+            "if": "Bash(*gh pr create*)",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
             "timeout": 30
           }
