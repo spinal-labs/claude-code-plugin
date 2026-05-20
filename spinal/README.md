@@ -37,6 +37,11 @@ Inside Claude Code:
 - Successful capture prints the uploaded context id, matched repository, and head SHA.
 - Set `SPINAL_CAPTURE_HOOK_FAIL_CLOSED=1` only for local testing when a failing capture should block the tool call.
 
+## Skills
+
+- **prepare-pr-session-summary** / **capture-pr-context** — enrich or diagnose the automatic session-context capture before `gh pr create`.
+- **validate-pr-findings** — reproduce a reviewed PR's findings locally with `spinal validate <PR#>`. Claude Code selects it after a PR has a completed Spinal review. It calls the CLI with `--json` (stable contract: an `outcome` of `validated`/`skipped`/`dry_run`/`needs_opt_in`, exit `0` = ran), runs the generated test on the host (`--yes`) or in a container (`--sandbox --sandbox-image <img>`), and relays the result as developer preflight only — never as a CI or merge gate.
+
 ## Diagnostics
 
 Normal PR creation does not require manually running the CLI or a skill. Use these commands only when debugging local setup or capture payloads:

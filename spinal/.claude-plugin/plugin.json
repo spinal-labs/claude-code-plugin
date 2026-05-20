@@ -1,7 +1,7 @@
 {
   "name": "spinal",
-  "description": "Capture PR session context for Spinal before gh pr create.",
-  "version": "0.1.1",
+  "description": "Spinal for Claude Code: capture PR session context before gh pr create, and validate a reviewed PR's findings locally with spinal validate.",
+  "version": "0.1.2",
   "author": {
     "name": "Spinal"
   },
@@ -12,7 +12,8 @@
     "spinal",
     "pr-review",
     "claude-code",
-    "session-context"
+    "session-context",
+    "validation"
   ],
   "skills": "./skills",
   "hooks": "./hooks/hooks.json"
