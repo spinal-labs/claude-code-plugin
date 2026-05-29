@@ -1,5 +1,5 @@
 {
-  "description": "Capture Spinal PR session context before simple gh pr create commands.",
+  "description": "Capture Spinal PR/MR session context before you open a PR or MR (gh pr create, glab mr create, git push).",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,6 +8,18 @@
           {
             "type": "command",
             "if": "Bash(*gh pr create*)",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "if": "Bash(*glab mr create*)",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "if": "Bash(*git push*)",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
             "timeout": 30
           }
