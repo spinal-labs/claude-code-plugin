@@ -25,6 +25,30 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(*gh pr create*)",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-pr-link-hook.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-feedback-hook.sh",
+            "timeout": 30
+          }
+        ]
+      }
     ]
   }
 }
