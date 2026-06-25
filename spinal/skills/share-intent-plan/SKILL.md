@@ -66,6 +66,20 @@ JSON
 The command prints the plan URL (e.g. `https://app.spinal.dev/plan/<id>`). Share
 that URL with the developer so they can review and comment.
 
+### Starting a fresh plan in the same checkout
+
+Spinal ties a plan to your agent session (falling back to the branch), so
+re-running `spinal plan submit` revises the *same* plan as you commit — even after
+HEAD moves. When you begin a genuinely new, unrelated task in a checkout that
+already has a plan, start fresh so you don't revise the old one:
+
+```bash
+spinal plan reset
+```
+
+This clears the cached plan for the current branch; the next `spinal plan submit`
+creates a new plan. (Detached HEAD: pass `--agent-session-id <id>`.)
+
 ### How to write blocks
 
 - Emit **3 to 12 conceptual blocks** for most plans. Describe components, inputs,
