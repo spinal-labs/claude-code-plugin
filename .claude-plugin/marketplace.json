@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Spinal plugins for Claude Code.",
-    "version": "0.1.7"
+    "version": "0.1.8"
   },
   "plugins": [
     {
       "name": "spinal",
       "source": "./spinal",
       "description": "Capture PR/MR session context for Spinal before you open a PR/MR (gh pr create, glab mr create, git push).",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "homepage": "https://getspinal.com",
       "license": "LicenseRef-Proprietary",
       "keywords": ["spinal", "pr-review", "session-context"]
