@@ -172,11 +172,14 @@ Plan-level:
   checklist). This is the main "how it works" text.
 - `decisions`: `{ id, decision, rationale, alternatives_rejected[], impacted_blocks[], needs_review }`.
   Include at most 3 important decisions. Keep each decision/rationale short. Set
-  `needs_review: true` only where you genuinely want human input.
+  `needs_review: true` only where you genuinely want human input, and set
+  `impacted_blocks` to the related block ids so the reviewer can respond against
+  that step.
 - `interfaces`: `{ id, from, to, contract, data[], references[] }` — the call/contract
   between actors, not a visual edge.
 - `open_questions`: `{ id, question, owner, blocks[] }`. Include only questions
-  that can change implementation direction.
+  that can change implementation direction. Set `blocks` to the related block ids
+  so the answer is anchored to the right step.
 
 Block-level (add to any block):
 
@@ -294,7 +297,26 @@ Both forms print pending feedback as JSON (oldest first) and mark it delivered:
 When `block_id` is set, the comment is about that block; when it is `null`, it is
 about the plan as a whole. Incorporate the feedback, then **re-submit the revised
 plan** (preserving ids) with `spinal plan submit` so the developer sees that the
-plan changed after their comment. When you re-submit, set `base_revision` to the
+plan changed after their comment.
+
+### Closing steering items
+
+`decisions` flagged `needs_review: true` and `open_questions` are the developer's
+**"Needs you"** queue in the UI. A reviewer responds to an item right from that
+queue, so the feedback you claim often resolves a specific one — its `body` usually
+quotes the item (a `> …` line), e.g. `Looks right — keep: <decision>` or the
+question text followed by an answer. That queue only empties when you clear the
+item on the next submit, so close the loop:
+
+- When a reviewer confirms or redirects a flagged **decision**, set its
+  `needs_review` to `false` on the revised submit (keep the same `id`); fold any
+  redirect into the `decision`/`rationale`.
+- When a reviewer answers an **open_question**, drop it from `open_questions` and
+  carry the answer into the plan (`flow_summary`, the relevant block, or a
+  `decision`).
+
+Leave an item flagged only while it still genuinely needs human input — otherwise
+the developer keeps seeing a "Needs you" item they already handled. When you re-submit, set `base_revision` to the
 latest `revision` Spinal gave you (from your last submit or feedback claim); if
 the plan moved on since then, Spinal rejects the stale overwrite with a conflict
 so you re-claim the newer feedback first.
