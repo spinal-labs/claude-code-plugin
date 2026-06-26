@@ -14,6 +14,16 @@ This is a shared scratchpad for intent, **not an approval gate**. Feedback is
 steering, not sign-off. Never tell the developer the plan was "approved" or that
 Spinal is "waiting to approve" — there is no such state.
 
+## The planning nudge
+
+Spinal also ships a deterministic **planning nudge**: when the developer's
+prompt looks like non-trivial implementation work, a `UserPromptSubmit` hook
+adds a short reminder to share an intent plan. The nudge is non-blocking and
+fires at most once per session. Treat it as a prompt to follow this skill — not
+as a gate. (An internal `planning_mode=require` exists for strict dogfood; it
+blocks the first mutating tool until a plan exists, with a `spinal: skip plan
+because <reason>` bypass. It is opt-in and never the default.)
+
 ## When to use
 
 Use judgment — do not externalize a plan for every change:
@@ -94,6 +104,76 @@ creates a new plan. (Detached HEAD: pass `--agent-session-id <id>`.)
   map, not a document. Keep titles to a short noun phrase (aim for ≤60 chars) and
   descriptions to **one plain sentence** that says what the block does. Put detail
   in `references`, not prose. (Hard caps are 160 / 2000 chars, but brevity wins.)
+
+### Decisions & Flow (richer plan shape)
+
+For non-trivial work, add the optional **v2 fields** so a senior reviewer can
+grasp flow, decisions, and ownership without reading every block. All fields are
+optional — omit them for small plans, and old-shape plans still work.
+
+Plan-level:
+
+- `flow_summary`: 2–5 sentences naming the key movement of data/control (not a
+  checklist).
+- `decisions`: `{ id, decision, rationale, alternatives_rejected[], impacted_blocks[], needs_review }`.
+  Set `needs_review: true` only where you genuinely want human input.
+- `interfaces`: `{ id, from, to, contract, data[], references[] }` — the call/contract
+  between actors, not a visual edge.
+- `open_questions`: `{ id, question, owner, blocks[] }`.
+
+Block-level (add to any block):
+
+- `owner`: the owning actor/component (e.g. `backend billing service`, `CLI permission hook`).
+- `decision` / `rationale`: why this block exists or is shaped this way.
+- `data_in` / `data_out`: short nouns (e.g. `selected_option_id`, `subscription_status`).
+- `interfaces`: `{ name, from, to, contract }`.
+- `risks` / `review_focus`: where the reviewer should look and comment.
+
+Keep ids stable across revisions just like block ids. Never put secrets in any of
+these fields. Example payload:
+
+```json
+{
+  "goal": "Add Stripe billing",
+  "summary": "Introduce checkout, subscription state, and webhook reconciliation.",
+  "flow_summary": "Billing settings starts checkout. The backend creates a Stripe Checkout Session, receives webhook updates, and stores subscription state for entitlement checks.",
+  "decisions": [
+    {
+      "id": "stripe-webhooks-source-of-truth",
+      "decision": "Treat Stripe webhooks as the subscription source of truth",
+      "rationale": "Checkout redirects are not reliable enough for final billing state.",
+      "alternatives_rejected": ["mark active on checkout success redirect"],
+      "impacted_blocks": ["webhook-reconcile"],
+      "needs_review": true
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "checkout-create",
+      "from": "Billing settings UI",
+      "to": "POST /billing/checkout",
+      "contract": "returns hosted checkout URL for the active company",
+      "data": ["company_id", "price_id", "checkout_url"]
+    }
+  ],
+  "blocks": [
+    {
+      "id": "webhook-reconcile",
+      "kind": "component",
+      "title": "Webhook reconciliation",
+      "description": "Process Stripe webhook events into durable subscription state.",
+      "owner": "backend billing service",
+      "data_in": ["checkout.session.completed", "customer.subscription.updated"],
+      "data_out": ["company_subscription.status", "billing_period_end"],
+      "rationale": "Webhook state survives redirect failures and async updates.",
+      "risks": ["duplicate webhook delivery", "out-of-order subscription events"],
+      "review_focus": ["idempotency key shape"],
+      "status": "current",
+      "references": [{ "kind": "file", "path": "backend/routes/billing.py" }]
+    }
+  ]
+}
+```
 
 ### Preserving block identity across revisions
 

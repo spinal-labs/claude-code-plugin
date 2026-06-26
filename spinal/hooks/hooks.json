@@ -1,6 +1,17 @@
 {
-  "description": "Capture Spinal PR/MR session context before you open a PR or MR (gh pr create, glab mr create, git push).",
+  "description": "Capture Spinal PR/MR session context before you open a PR or MR (gh pr create, glab mr create, git push), and nudge a Spinal intent plan before non-trivial work.",
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-planning-nudge-hook.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -22,6 +33,16 @@
             "if": "Bash(*git push*)",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-capture-hook.sh",
             "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/spinal-planning-gate-hook.sh",
+            "timeout": 15
           }
         ]
       }
