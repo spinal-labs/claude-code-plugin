@@ -1,7 +1,7 @@
 {
   "name": "spinal",
   "description": "Spinal for Claude Code: capture PR/MR session context before you open a PR/MR (gh pr create, glab mr create, git push), preflight the diff locally, and validate a reviewed PR's findings with spinal validate.",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "author": {
     "name": "Spinal"
   },
