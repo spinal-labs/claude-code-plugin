@@ -16,7 +16,7 @@ markdown archive, biased toward implementation usefulness over academic complete
 ROOT="${SPINAL_KNOWLEDGE_ROOT:-/Users/thejusri/sourcecode/spinal-labs/spinal-knowledge}"
 ```
 
-Paper files live at `$ROOT/<YYYY-MM-DD>/papers/<slug>.md`. Each has an H1 title,
+Paper files live at `$ROOT/papers/<YYYY-MM-DD>/<slug>.md`. Each has an H1 title,
 `Published:` / `Source Article:` / `Paper:` / `Tags:` lines, and `## Summary`,
 `## Conclusion`, `## Notes` sections.
 
@@ -37,8 +37,8 @@ Always also search the literal salient nouns from the request.
 Use ripgrep over the archive. Search titles/tags first, then bodies:
 
 ```bash
-rg -l -i -e 'mcp' -e 'agents' "$ROOT" --glob '*/papers/*.md'
-rg -i --heading -e 'mcp' "$ROOT" --glob '*/papers/*.md'
+rg -l -i -e 'mcp' -e 'agents' "$ROOT" --glob 'papers/*/*.md'
+rg -i --heading -e 'mcp' "$ROOT" --glob 'papers/*/*.md'
 ```
 
 ## Rank
